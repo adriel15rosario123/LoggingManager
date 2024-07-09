@@ -9,28 +9,31 @@ using System.Text;
 
 namespace LoggingManagerAPI.Controllers
 {
-    [Route("authentication")]
+    [Route("auth")]
     [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly IConfiguration configuration;
         private readonly IUserRepository userRepository;
 
-        public AuthenticationController(IConfiguration configuration, IUserRepository userRepository)
+        public AuthController(IConfiguration configuration, IUserRepository userRepository)
         {
             this.configuration = configuration;
             this.userRepository = userRepository;
         }
 
-        [HttpPost]
-        public IActionResult Authenticate([FromBody] Credential credential)
+        [HttpPost("login")]
+        public IActionResult LogIn([FromBody] Credential credential)
         {
 
             var response = userRepository.Login(credential);
 
             if(response!.ErrorCode != 0)
             {
-                return BadRequest(response);
+                return BadRequest(new
+                {
+                    response = response
+                });
             }
             else
             {
@@ -38,7 +41,7 @@ namespace LoggingManagerAPI.Controllers
                     new Claim("role",response.ResponseData!.UserType.Type)
                 };
                 
-                DateTime expiresAt = DateTime.UtcNow.AddMinutes(20);
+                DateTime expiresAt = DateTime.UtcNow.AddSeconds(30);
 
                 return Ok(new
                 {
@@ -49,6 +52,40 @@ namespace LoggingManagerAPI.Controllers
             }
 
         }
+
+
+        [HttpGet("token/status")]
+        public IActionResult TokenStatus(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(configuration["SecretKey"]);
+
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateLifetime = true,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                return Ok(new {active = true});
+            }
+            catch
+            {
+                return Ok(new {active = false });
+            }
+        }
+
+        //[HttpPost]
+        //[Authorize(Roles = "admin,client")]
+        //public IActionResult LogOut()
+        //{
+
+        //}
 
         [HttpGet]
         [Authorize(Roles = "admin")]

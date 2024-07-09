@@ -19,7 +19,7 @@ namespace LoggingManagerAdapters.Repositories
 
         public OracleProcedureResponse<User>? Login(Credential credential)
         {
-            return context.ExecuteStoreProcedure<Credential,User>(StoreProcedure.LoginUser, credential);
+            return context.ExecuteStoreProcedure<Credential,User>(StoreProcedure.LoginUser, credential);    
         }
     }
 }
