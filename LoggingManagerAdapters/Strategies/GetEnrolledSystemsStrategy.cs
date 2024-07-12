@@ -6,26 +6,24 @@ using System.Data;
 
 namespace LoggingManagerAdapters.Strategies
 {
-    public class LoginUserStrategy : IProcedureStrategy
+    public class GetEnrolledSystemsStrategy : IProcedureStrategy
     {
-
         private OracleCommand command;
 
-        public LoginUserStrategy(OracleCommand command)
+        public GetEnrolledSystemsStrategy(OracleCommand command)
         {
             this.command = command;
         }
-
         public OracleProcedureResponse<TOutput>? executeProcedure<TOutput>()
         {
-
             command.ExecuteNonQuery();
 
             int errorCode = ((OracleDecimal)command.Parameters["o_error_code"].Value).ToInt32();
             string errorMessage = command.Parameters["o_error_message"].Value.ToString()!;
 
-            User user = new User();
+            List<EnrollSystem> enrolledSystems = new List<EnrollSystem>();
 
+            //retrive the output parameters
             if (errorCode == 0)
             {
                 // Successful execution, retrieve data from the cursor
@@ -33,13 +31,20 @@ namespace LoggingManagerAdapters.Strategies
 
                 while (reader.Read())
                 {
-                    user.UserId = reader.GetInt32(reader.GetOrdinal("UserId"));
-                    user.Username = reader.GetString(reader.GetOrdinal("Username"));
-                    user.UserType.UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId"));
-                    user.UserType.Type = reader.GetString(reader.GetOrdinal("UserType"));
+                    EnrollSystem enrollSystem = new EnrollSystem
+                    {
+                        EnrolledSystemId = reader.GetInt32(reader.GetOrdinal("EnrolledSystemId")),
+                        SystemName = reader.GetString(reader.GetOrdinal("SystemName")),
+                        EnrolledDate = reader.GetDateTime(reader.GetOrdinal("EnrolledDate")),
+                        LastUpdatedDate = reader.IsDBNull(reader.GetOrdinal("LastUpdatedDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("LastUpdatedDate")),
+                        ErrorLogs = reader.GetInt32(reader.GetOrdinal("ErrorLogs")),
+                        TrackingLogs = reader.GetInt32(reader.GetOrdinal("TrackingLogs"))
+                    };
+
+                    enrolledSystems.Add(enrollSystem);
                 }
 
-                return new OracleProcedureResponse<User>(errorCode, errorMessage, user) as OracleProcedureResponse<TOutput>;
+                return new OracleProcedureResponse<List<EnrollSystem>>(errorCode, errorMessage, enrolledSystems) as OracleProcedureResponse<TOutput>;
             }
             else
             {
@@ -49,12 +54,6 @@ namespace LoggingManagerAdapters.Strategies
 
         public void setParameters<TInput>(TInput inputs = default)
         {
-            Credential? credential = inputs as Credential;
-
-            // Input parameter
-            command.Parameters.Add("p_username", OracleDbType.NVarchar2).Value = credential.Username;
-            command.Parameters.Add("p_password", OracleDbType.NVarchar2).Value = credential.Password;
-
             // Output parameters
             command.Parameters.Add("o_response_data", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
             command.Parameters.Add("o_error_code", OracleDbType.Int32).Direction = ParameterDirection.Output;

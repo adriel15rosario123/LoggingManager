@@ -46,7 +46,7 @@ namespace LoggingManagerAdapters.Strategies
             }
         }
 
-        public void setParameters<TInput>(TInput inputs)
+        public void setParameters<TInput>(TInput inputs = default)
         {
 
             string? username = inputs as string;

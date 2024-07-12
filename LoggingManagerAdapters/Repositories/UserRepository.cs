@@ -12,14 +12,15 @@ namespace LoggingManagerAdapters.Repositories
             this.context = context;
         }
 
-        public OracleProcedureResponse<User>? GetUserByUsername(string username)
+        public OracleProcedureResponse<User>? getByUsername(string username)
         {
             return context.ExecuteStoreProcedure<string,User>(StoreProcedure.GetUserByUsername, username);
         }
 
-        public OracleProcedureResponse<User>? Login(Credential credential)
+        public OracleProcedureResponse<User>? login(Credential credential)
         {
             return context.ExecuteStoreProcedure<Credential,User>(StoreProcedure.LoginUser, credential);    
         }
+
     }
 }
