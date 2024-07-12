@@ -4,7 +4,7 @@ namespace LoggingManagerCore.Ports.Secundary
 {
     public interface IProcedureStrategy
     {
-        void setParameters<TInput>(TInput inputs);
+        void setParameters<TInput>(TInput inputs = default);
 
         OracleProcedureResponse<TOutput>? executeProcedure<TOutput>();
     }

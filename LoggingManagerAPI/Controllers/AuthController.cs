@@ -1,6 +1,6 @@
 ﻿using LoggingManagerCore.Entities;
+using LoggingManagerCore.Ports.Primary;
 using LoggingManagerCore.Ports.Secundary;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,21 +14,21 @@ namespace LoggingManagerAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration configuration;
-        private readonly IUserRepository userRepository;
+        private readonly IAuthService _authService;
 
-        public AuthController(IConfiguration configuration, IUserRepository userRepository)
+        public AuthController(IConfiguration configuration, IAuthService authService)
         {
             this.configuration = configuration;
-            this.userRepository = userRepository;
+            _authService = authService;
         }
 
         [HttpPost("login")]
         public IActionResult LogIn([FromBody] Credential credential)
         {
 
-            var response = userRepository.Login(credential);
+            var response = _authService.logIn(credential);
 
-            if(response!.ErrorCode != 0)
+            if (response!.ErrorCode != 0)
             {
                 return BadRequest(new
                 {
@@ -40,8 +40,8 @@ namespace LoggingManagerAPI.Controllers
                 List<Claim> claims = new List<Claim> {
                     new Claim("role",response.ResponseData!.UserType.Type)
                 };
-                
-                DateTime expiresAt = DateTime.UtcNow.AddSeconds(30);
+
+                DateTime expiresAt = DateTime.UtcNow.AddMinutes(30);
 
                 return Ok(new
                 {
@@ -72,29 +72,12 @@ namespace LoggingManagerAPI.Controllers
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                return Ok(new {active = true});
+                return Ok(new { active = true });
             }
             catch
             {
-                return Ok(new {active = false });
+                return Ok(new { active = false });
             }
-        }
-
-        //[HttpPost]
-        //[Authorize(Roles = "admin,client")]
-        //public IActionResult LogOut()
-        //{
-
-        //}
-
-        [HttpGet]
-        [Authorize(Roles = "admin")]
-        public IActionResult GetUser(string username)
-        {
-
-            var response = userRepository.GetUserByUsername(username);
-
-            return Ok(response);
         }
 
         private string CreateToken(IEnumerable<Claim> claims, DateTime expiresAt)

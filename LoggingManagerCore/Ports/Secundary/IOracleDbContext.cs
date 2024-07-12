@@ -6,5 +6,7 @@ namespace LoggingManagerCore.Ports.Secundary
     public interface IOracleDbContext
     {
         OracleProcedureResponse<TOutput>? ExecuteStoreProcedure<TInput, TOutput>(StoreProcedure procedure, TInput inputData);
+
+        OracleProcedureResponse<TOutput>? ExecuteStoreProcedure<TOutput>(StoreProcedure procedure);
     }
 }

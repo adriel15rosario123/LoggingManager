@@ -34,6 +34,24 @@ namespace LoggingManagerAdapters.Repositories
                 return response;
             }
         }
+
+        public OracleProcedureResponse<TOutput>? ExecuteStoreProcedure<TOutput>(StoreProcedure procedure)
+        {
+            using (OracleConnection connection = new OracleConnection(connectionString))
+            {
+                connection.Open();
+
+                OracleProcedureHandler procedureHandler = new OracleProcedureHandler(procedure, connection, schema);
+
+                procedureHandler.ProcedureStrategy.setParameters<object>();
+
+                OracleProcedureResponse<TOutput>? response = procedureHandler.ProcedureStrategy.executeProcedure<TOutput>();
+
+                connection.Close();
+
+                return response;
+            }
+        }
     }
 
 

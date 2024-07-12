@@ -1,0 +1,22 @@
+﻿using LoggingManagerCore.Entities;
+using LoggingManagerCore.Ports.Primary;
+using LoggingManagerCore.Ports.Secundary;
+
+namespace LoggingManagerAdapters.Services
+{
+    public class AuthService : IAuthService
+    {
+
+        IUserRepository userRepository;
+
+        public AuthService(IUserRepository userRepository)
+        {
+            this.userRepository = userRepository;
+        }
+
+        public OracleProcedureResponse<User>? logIn(Credential credential)
+        {
+            return userRepository.login(credential);
+        }
+    }
+}

@@ -4,8 +4,9 @@ namespace LoggingManagerCore.Ports.Secundary
 {
     public interface IUserRepository
     {
-        OracleProcedureResponse<User>? GetUserByUsername(string username);
+        OracleProcedureResponse<User>? getByUsername(string username);
 
-        OracleProcedureResponse<User>? Login(Credential credential);
+        OracleProcedureResponse<User>? login(Credential credential);
+
     }
 }

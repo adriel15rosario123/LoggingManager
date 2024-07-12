@@ -11,5 +11,7 @@ namespace LoggingManagerCore.Enums
         [EnumStringValue("LOGIN_USER")]
         LoginUser,
 
+        [EnumStringValue("GET_ENROLLED_SYSTEMS")]
+        GetEnrolledSystems
     }
 }
