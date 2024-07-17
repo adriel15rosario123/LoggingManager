@@ -7,7 +7,7 @@
         public string? ErrorMessage { get; set; } = string.Empty;
 
 
-        public GenericResponse(int? errorCode, string? errorMessage, T responseData)
+        public GenericResponse(int? errorCode, string? errorMessage, T? responseData)
         {
             ErrorCode = errorCode;
             ErrorMessage = errorMessage;

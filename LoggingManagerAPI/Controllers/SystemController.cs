@@ -1,4 +1,5 @@
-﻿using LoggingManagerCore.Ports.Primary;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Ports.Primary;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,9 +18,16 @@ namespace LoggingManagerAPI.Controllers
 
         [HttpGet]
         [Authorize(Roles = "admin")]
-        public ActionResult Get()
+        public IActionResult Get()
         {
             return Ok(_systemService.getAll());
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public IActionResult Create(CreateSystemDto createSystemDto)
+        {
+            return Ok(_systemService.Create(createSystemDto));
         }
     }
 }

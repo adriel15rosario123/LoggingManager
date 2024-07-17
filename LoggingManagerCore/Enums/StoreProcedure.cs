@@ -12,6 +12,9 @@ namespace LoggingManagerCore.Enums
         LoginUser,
 
         [EnumStringValue("GET_ENROLLED_SYSTEMS")]
-        GetEnrolledSystems
+        GetEnrolledSystems,
+
+        [EnumStringValue("ENROLL_NEW_SYSTEM")]
+        EnrollNewSystem
     }
 }

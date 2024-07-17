@@ -7,5 +7,6 @@ namespace LoggingManagerCore.Ports.Secundary
     {
         GenericResponse<List<EnrollSystem>>? getAll();
 
+        GenericResponse<string>? Create(CreateSystemDto createSystemDto);
     }
 }

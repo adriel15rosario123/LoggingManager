@@ -13,6 +13,12 @@ namespace LoggingManagerAdapters.Services
         {
             this.systemRepository = systemRepository;
         }
+
+        public GenericResponse<string>? Create(CreateSystemDto createSystemDto)
+        {
+            return systemRepository.Create(createSystemDto);
+        }
+
         public GenericResponse<List<EnrollSystem>>? getAll()
         {
             return systemRepository.getAll();
