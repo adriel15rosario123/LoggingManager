@@ -1,4 +1,5 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 using LoggingManagerCore.Ports.Primary;
 using LoggingManagerCore.Ports.Secundary;
 
@@ -12,7 +13,7 @@ namespace LoggingManagerAdapters.Services
         {
             this.systemRepository = systemRepository;
         }
-        public OracleProcedureResponse<List<EnrollSystem>>? getAll()
+        public GenericResponse<List<EnrollSystem>>? getAll()
         {
             return systemRepository.getAll();
         }

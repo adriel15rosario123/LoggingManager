@@ -1,10 +1,11 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 
 namespace LoggingManagerCore.Ports.Secundary
 {
     public interface ISystemRepository
     {
-        OracleProcedureResponse<List<EnrollSystem>>? getAll();
+        GenericResponse<List<EnrollSystem>>? getAll();
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 using LoggingManagerCore.Ports.Primary;
 using LoggingManagerCore.Ports.Secundary;
 
@@ -11,7 +12,7 @@ namespace LoggingManagerAdapters.Services
         {
             this.userRepository = userRepository;
         }
-        public OracleProcedureResponse<User>? getByUsername(string username)
+        public GenericResponse<User>? getByUsername(string username)
         {
             return userRepository.getByUsername(username);
         }

@@ -89,8 +89,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<UnauthorizeMiddleware>();
-
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -98,7 +96,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-
 
 app.Run();

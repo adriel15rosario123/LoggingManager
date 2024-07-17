@@ -1,12 +1,12 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
 using LoggingManagerCore.Enums;
 
 namespace LoggingManagerCore.Ports.Secundary
 {
     public interface IOracleDbContext
     {
-        OracleProcedureResponse<TOutput>? ExecuteStoreProcedure<TInput, TOutput>(StoreProcedure procedure, TInput inputData);
+        GenericResponse<TOutput>? ExecuteStoreProcedure<TInput, TOutput>(StoreProcedure procedure, TInput inputData);
 
-        OracleProcedureResponse<TOutput>? ExecuteStoreProcedure<TOutput>(StoreProcedure procedure);
+        GenericResponse<TOutput>? ExecuteStoreProcedure<TOutput>(StoreProcedure procedure);
     }
 }

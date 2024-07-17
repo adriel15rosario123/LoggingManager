@@ -28,27 +28,21 @@ namespace LoggingManagerAPI.Controllers
 
             var response = _authService.logIn(credential);
 
-            if (response!.ErrorCode != 0)
+            if (response is null || response.ErrorCode is not null)
             {
-                return BadRequest(new
-                {
-                    response = response
-                });
+                return Unauthorized(response);
             }
             else
             {
                 List<Claim> claims = new List<Claim> {
-                    new Claim("role",response.ResponseData!.UserType.Type)
+                    new Claim("role",response.Data!.User.UserType.Type)
                 };
 
                 DateTime expiresAt = DateTime.UtcNow.AddMinutes(30);
+                response.Data.Token.ExpiresAt = expiresAt;
+                response.Data.Token.Key = CreateToken(claims, expiresAt);
 
-                return Ok(new
-                {
-                    accessToken = CreateToken(claims, expiresAt),
-                    expires = expiresAt,
-                    response = response
-                });
+                return Ok(response);
             }
 
         }
@@ -72,11 +66,11 @@ namespace LoggingManagerAPI.Controllers
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
 
-                return Ok(new { active = true });
+                return Ok(new { isActive = true });
             }
             catch
             {
-                return Ok(new { active = false });
+                return Ok(new { isActive = false });
             }
         }
 

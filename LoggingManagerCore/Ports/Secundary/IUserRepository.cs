@@ -1,12 +1,13 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 
 namespace LoggingManagerCore.Ports.Secundary
 {
     public interface IUserRepository
     {
-        OracleProcedureResponse<User>? getByUsername(string username);
+        GenericResponse<User>? getByUsername(string username);
 
-        OracleProcedureResponse<User>? login(Credential credential);
+        GenericResponse<User>? login(Credential credential);
 
     }
 }
