@@ -14,6 +14,11 @@ namespace LoggingManagerAdapters.Repositories
             this.context = context;
         }
 
+        public GenericResponse<string>? Create(CreateSystemDto createSystemDto)
+        {
+            return context.ExecuteStoreProcedure<CreateSystemDto,string>(StoreProcedure.EnrollNewSystem,createSystemDto);
+        }
+
         public GenericResponse<List<EnrollSystem>>? getAll()
         {
             return context.ExecuteStoreProcedure<List<EnrollSystem>>(StoreProcedure.GetEnrolledSystems);
