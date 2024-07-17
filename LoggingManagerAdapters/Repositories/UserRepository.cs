@@ -1,4 +1,5 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 using LoggingManagerCore.Enums;
 using LoggingManagerCore.Ports.Secundary;
 
@@ -12,12 +13,12 @@ namespace LoggingManagerAdapters.Repositories
             this.context = context;
         }
 
-        public OracleProcedureResponse<User>? getByUsername(string username)
+        public GenericResponse<User>? getByUsername(string username)
         {
             return context.ExecuteStoreProcedure<string,User>(StoreProcedure.GetUserByUsername, username);
         }
 
-        public OracleProcedureResponse<User>? login(Credential credential)
+        public GenericResponse<User>? login(Credential credential)
         {
             return context.ExecuteStoreProcedure<Credential,User>(StoreProcedure.LoginUser, credential);    
         }

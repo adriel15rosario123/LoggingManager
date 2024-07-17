@@ -1,4 +1,5 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 using LoggingManagerCore.Ports.Secundary;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
@@ -16,17 +17,17 @@ namespace LoggingManagerAdapters.Strategies
             this.command = command;
         }
 
-        public OracleProcedureResponse<TOutput>? executeProcedure<TOutput>()
+        public GenericResponse<TOutput>? executeProcedure<TOutput>()
         {
 
             command.ExecuteNonQuery();
 
-            int errorCode = ((OracleDecimal)command.Parameters["o_error_code"].Value).ToInt32();
-            string errorMessage = command.Parameters["o_error_message"].Value.ToString()!;
+            int? errorCode = ((OracleDecimal)command.Parameters["o_error_code"].Value).IsNull ? null : ((OracleDecimal)command.Parameters["o_error_code"].Value).ToInt32();
+            string? errorMessage = ((OracleString)command.Parameters["o_error_message"].Value).IsNull ? null : command.Parameters["o_error_message"].Value.ToString();
 
             User user = new User();
 
-            if (errorCode == 0)
+            if (errorCode is null)
             {
                 // Successful execution, retrieve data from the cursor
                 OracleDataReader reader = ((OracleRefCursor)command.Parameters["o_response_data"].Value).GetDataReader();
@@ -39,26 +40,61 @@ namespace LoggingManagerAdapters.Strategies
                     user.UserType.Type = reader.GetString(reader.GetOrdinal("UserType"));
                 }
 
-                return new OracleProcedureResponse<User>(errorCode, errorMessage, user) as OracleProcedureResponse<TOutput>;
+                return new GenericResponse<User>(errorCode, errorMessage, user) as GenericResponse<TOutput>;
             }
             else
             {
-                return new OracleProcedureResponse<User>(errorCode, errorMessage) as OracleProcedureResponse<TOutput>;
+                return new GenericResponse<User>(errorCode, errorMessage) as GenericResponse<TOutput>;
             }
         }
 
-        public void setParameters<TInput>(TInput inputs = default)
+        public void setParameters<TInput>(TInput? inputs = default)
         {
-            Credential? credential = inputs as Credential;
+          
+            OracleParameter[] parameters =
+            [
 
-            // Input parameter
-            command.Parameters.Add("p_username", OracleDbType.NVarchar2).Value = credential.Username;
-            command.Parameters.Add("p_password", OracleDbType.NVarchar2).Value = credential.Password;
+                //Input params
+                new OracleParameter()
+                {
+                    ParameterName = "p_username",
+                    OracleDbType = OracleDbType.NVarchar2,
+                    Value = (inputs as Credential)!.Username,
+                    IsNullable = true
+                },
+                new OracleParameter()
+                {
+                    ParameterName = "p_password",
+                    OracleDbType = OracleDbType.NVarchar2,
+                    Value = (inputs as Credential)!.Password,
+                    IsNullable = true
+                },
 
-            // Output parameters
-            command.Parameters.Add("o_response_data", OracleDbType.RefCursor).Direction = ParameterDirection.Output;
-            command.Parameters.Add("o_error_code", OracleDbType.Int32).Direction = ParameterDirection.Output;
-            command.Parameters.Add("o_error_message", OracleDbType.Varchar2, 200).Direction = ParameterDirection.Output;
+                //Output params
+                new OracleParameter()
+                {
+                    ParameterName = "o_response_data",
+                    OracleDbType = OracleDbType.RefCursor,
+                    Direction = ParameterDirection.Output,
+                    IsNullable = true
+                },
+                new OracleParameter()
+                {
+                    ParameterName = "o_error_code",
+                    OracleDbType = OracleDbType.Int32,
+                    Direction = ParameterDirection.Output,
+                    IsNullable = true
+                },
+                new OracleParameter(){
+                    ParameterName = "o_error_message",
+                    OracleDbType = OracleDbType.Varchar2,
+                    Direction = ParameterDirection.Output,
+                    Size = 200,
+                    IsNullable = true
+                },
+            ];
+
+            command.Parameters.AddRange( parameters );
         }
     }
 }

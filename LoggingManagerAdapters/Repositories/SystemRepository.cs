@@ -1,4 +1,5 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 using LoggingManagerCore.Enums;
 using LoggingManagerCore.Ports.Secundary;
 
@@ -13,7 +14,7 @@ namespace LoggingManagerAdapters.Repositories
             this.context = context;
         }
 
-        public OracleProcedureResponse<List<EnrollSystem>>? getAll()
+        public GenericResponse<List<EnrollSystem>>? getAll()
         {
             return context.ExecuteStoreProcedure<List<EnrollSystem>>(StoreProcedure.GetEnrolledSystems);
         }

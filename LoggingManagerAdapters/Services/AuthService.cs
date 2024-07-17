@@ -1,4 +1,5 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 using LoggingManagerCore.Ports.Primary;
 using LoggingManagerCore.Ports.Secundary;
 
@@ -14,9 +15,15 @@ namespace LoggingManagerAdapters.Services
             this.userRepository = userRepository;
         }
 
-        public OracleProcedureResponse<User>? logIn(Credential credential)
+        public GenericResponse<LoginDto>? logIn(Credential credential)
         {
-            return userRepository.login(credential);
+            var user = userRepository.login(credential);
+
+            LoginDto loginDto = new LoginDto { User = user.Data, Token = new TokenDto()};
+
+            GenericResponse<LoginDto> response = new GenericResponse<LoginDto> { Data = loginDto, ErrorCode= user.ErrorCode, ErrorMessage=user.ErrorMessage };
+
+            return response;
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using LoggingManagerAdapters.Helpers;
-using LoggingManagerCore.Entities;
+using LoggingManagerCore.Dtos;
 using LoggingManagerCore.Enums;
 using LoggingManagerCore.Ports.Secundary;
 using Oracle.ManagedDataAccess.Client;
@@ -17,7 +17,7 @@ namespace LoggingManagerAdapters.Repositories
             this.schema = schema;
         }
 
-        public OracleProcedureResponse<TOutput>? ExecuteStoreProcedure<TInput, TOutput>(StoreProcedure procedure, TInput inputData)
+        public GenericResponse<TOutput>? ExecuteStoreProcedure<TInput, TOutput>(StoreProcedure procedure, TInput inputData)
         {
             using (OracleConnection connection = new OracleConnection(connectionString))
             {
@@ -27,7 +27,7 @@ namespace LoggingManagerAdapters.Repositories
 
                 procedureHandler.ProcedureStrategy.setParameters(inputData);
 
-                OracleProcedureResponse<TOutput>? response = procedureHandler.ProcedureStrategy.executeProcedure<TOutput>();
+                GenericResponse<TOutput>? response = procedureHandler.ProcedureStrategy.executeProcedure<TOutput>();
 
                 connection.Close();
 
@@ -35,7 +35,7 @@ namespace LoggingManagerAdapters.Repositories
             }
         }
 
-        public OracleProcedureResponse<TOutput>? ExecuteStoreProcedure<TOutput>(StoreProcedure procedure)
+        public GenericResponse<TOutput>? ExecuteStoreProcedure<TOutput>(StoreProcedure procedure)
         {
             using (OracleConnection connection = new OracleConnection(connectionString))
             {
@@ -45,7 +45,7 @@ namespace LoggingManagerAdapters.Repositories
 
                 procedureHandler.ProcedureStrategy.setParameters<object>();
 
-                OracleProcedureResponse<TOutput>? response = procedureHandler.ProcedureStrategy.executeProcedure<TOutput>();
+                GenericResponse<TOutput>? response = procedureHandler.ProcedureStrategy.executeProcedure<TOutput>();
 
                 connection.Close();
 

@@ -1,4 +1,4 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
 
 namespace LoggingManagerCore.Ports.Secundary
 {
@@ -6,6 +6,6 @@ namespace LoggingManagerCore.Ports.Secundary
     {
         void setParameters<TInput>(TInput inputs = default);
 
-        OracleProcedureResponse<TOutput>? executeProcedure<TOutput>();
+        GenericResponse<TOutput>? executeProcedure<TOutput>();
     }
 }

@@ -1,4 +1,5 @@
-﻿using LoggingManagerCore.Entities;
+﻿using LoggingManagerCore.Dtos;
+using LoggingManagerCore.Entities;
 using LoggingManagerCore.Ports.Secundary;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
@@ -15,7 +16,7 @@ namespace LoggingManagerAdapters.Strategies
             this.command = command;
         }
 
-        public OracleProcedureResponse<TOutput>? executeProcedure<TOutput>()
+        public GenericResponse<TOutput>? executeProcedure<TOutput>()
         {
             command.ExecuteNonQuery();
 
@@ -38,11 +39,11 @@ namespace LoggingManagerAdapters.Strategies
                     user.UserType.Type = reader.GetString(reader.GetOrdinal("UserType"));
                 }
 
-                return new OracleProcedureResponse<User>(errorCode, errorMessage, user) as OracleProcedureResponse<TOutput>;
+                return new GenericResponse<User>(errorCode, errorMessage, user) as GenericResponse<TOutput>;
             }
             else
             {
-                return new OracleProcedureResponse<User>(errorCode, errorMessage) as OracleProcedureResponse<TOutput>;
+                return new GenericResponse<User>(errorCode, errorMessage) as GenericResponse<TOutput>;
             }
         }
 
