@@ -8,5 +8,7 @@ namespace LoggingManagerCore.Ports.Primary
         GenericResponse<List<EnrollSystem>>? getAll();
 
         GenericResponse<string>? Create(CreateSystemDto createSystemDto);
+
+        GenericResponse<string>? Update(UpdateSystemDto updateSystemDto);
     }
 }

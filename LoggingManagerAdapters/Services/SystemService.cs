@@ -23,5 +23,10 @@ namespace LoggingManagerAdapters.Services
         {
             return systemRepository.getAll();
         }
+
+        public GenericResponse<string>? Update(UpdateSystemDto updateSystemDto)
+        {
+            return systemRepository.Update(updateSystemDto);
+        }
     }
 }

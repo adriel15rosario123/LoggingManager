@@ -23,5 +23,10 @@ namespace LoggingManagerAdapters.Repositories
         {
             return context.ExecuteStoreProcedure<List<EnrollSystem>>(StoreProcedure.GetEnrolledSystems);
         }
+
+        public GenericResponse<string>? Update(UpdateSystemDto updateSystemDto)
+        {
+            return context.ExecuteStoreProcedure<UpdateSystemDto,string>(StoreProcedure.UpdateSystem ,updateSystemDto);
+        }
     }
 }
