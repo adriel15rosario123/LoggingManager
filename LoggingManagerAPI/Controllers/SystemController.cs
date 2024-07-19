@@ -29,5 +29,13 @@ namespace LoggingManagerAPI.Controllers
         {
             return Ok(_systemService.Create(createSystemDto));
         }
+
+        [HttpPatch("{id}")]
+        [Authorize(Roles = "admin")]
+        public IActionResult Update(int id, [FromBody] UpdateSystemDto updateSystemDto)
+        {
+            updateSystemDto.SystemId = id;
+            return Ok(_systemService.Update(updateSystemDto));
+        }
     }
 }

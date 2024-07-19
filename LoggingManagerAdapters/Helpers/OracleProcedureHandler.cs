@@ -29,6 +29,7 @@ namespace LoggingManagerAdapters.Helpers
                 StoreProcedure.GetUserByUsername => new GetUserByUsernameStrategy(command),
                 StoreProcedure.GetEnrolledSystems => new GetEnrolledSystemsStrategy(command),
                 StoreProcedure.EnrollNewSystem => new EnrollNewSystemStrategy(command),
+                StoreProcedure.UpdateSystem => new UpdateSystemStrategy(command),
                 _ => throw new ArgumentException($"Invalid procedure: {EnumHandler.GetValue(procedure)}")
             } ;
         }
