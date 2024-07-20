@@ -7,11 +7,11 @@ using System.Data;
 
 namespace LoggingManagerAdapters.Strategies
 {
-    public class GetEnrolledSystemsStrategy : IProcedureStrategy
+    public class GetAllSystemsStrategy : IProcedureStrategy
     {
         private OracleCommand command;
 
-        public GetEnrolledSystemsStrategy(OracleCommand command)
+        public GetAllSystemsStrategy(OracleCommand command)
         {
             this.command = command;
         }
@@ -34,7 +34,9 @@ namespace LoggingManagerAdapters.Strategies
                 {
                     EnrollSystem enrollSystem = new EnrollSystem
                     {
-                        EnrolledSystemId = reader.GetInt32(reader.GetOrdinal("EnrolledSystemId")),
+                        SystemId = reader.GetInt32(reader.GetOrdinal("EnrolledSystemId")),
+                        SystemUsername = reader.GetString(reader.GetOrdinal("SystemUsername")),
+                        SystemPassword = reader.GetString(reader.GetOrdinal("SystemPassword")),
                         SystemName = reader.GetString(reader.GetOrdinal("SystemName")),
                         EnrolledDate = reader.GetDateTime(reader.GetOrdinal("EnrolledDate")),
                         LastUpdatedDate = reader.IsDBNull(reader.GetOrdinal("LastUpdatedDate")) ? (DateTime?)null : reader.GetDateTime(reader.GetOrdinal("LastUpdatedDate")),
