@@ -16,7 +16,7 @@ namespace LoggingManagerAdapters.Strategies
             this.command = command;
         }
 
-        public GenericResponse<TOutput>? executeProcedure<TOutput>()
+        public TOutput? executeProcedure<TOutput>() where TOutput : class
         {
             command.ExecuteNonQuery();
 
@@ -39,11 +39,11 @@ namespace LoggingManagerAdapters.Strategies
                     user.UserType.Type = reader.GetString(reader.GetOrdinal("UserType"));
                 }
 
-                return new GenericResponse<User>(errorCode, errorMessage, user) as GenericResponse<TOutput>;
+                return new GenericResponse<User>(errorCode, errorMessage, user) as TOutput;
             }
             else
             {
-                return new GenericResponse<User>(errorCode, errorMessage) as GenericResponse<TOutput>;
+                return new GenericResponse<User>(errorCode, errorMessage) as TOutput;
             }
         }
 

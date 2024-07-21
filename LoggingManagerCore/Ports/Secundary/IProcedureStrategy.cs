@@ -6,6 +6,6 @@ namespace LoggingManagerCore.Ports.Secundary
     {
         void setParameters<TInput>(TInput? inputs = default);
 
-        GenericResponse<TOutput>? executeProcedure<TOutput>();
+        TOutput? executeProcedure<TOutput>()  where TOutput:class;
     }
 }

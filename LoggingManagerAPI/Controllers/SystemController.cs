@@ -37,5 +37,19 @@ namespace LoggingManagerAPI.Controllers
             updateSystemDto.SystemId = id;
             return Ok(_systemService.Update(updateSystemDto));
         }
+
+        //[HttpGet("{id}/errors")]
+        //[Authorize(Roles = "admin")]
+        //public IActionResult GetErrors(int id) 
+        //{
+        //    return Ok(_systemService.GetErrorLogs(id));
+        //}
+
+        [HttpGet("{id}/errors")]
+        [Authorize(Roles = "admin")]
+        public IActionResult GetPaginatedErrors(int id, [FromQuery]int pageSize,[FromQuery]int pageNumber)
+        {
+            return Ok(_systemService.GetErrorLogs(new GetErrorLogDto(id,pageSize,pageNumber)));
+        }
     }
 }

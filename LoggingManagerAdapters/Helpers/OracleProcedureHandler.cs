@@ -30,6 +30,8 @@ namespace LoggingManagerAdapters.Helpers
                 StoreProcedure.GetEnrolledSystems => new GetAllSystemsStrategy(command),
                 StoreProcedure.EnrollNewSystem => new EnrollNewSystemStrategy(command),
                 StoreProcedure.UpdateSystem => new UpdateSystemStrategy(command),
+                StoreProcedure.GetErrorLogs => new GetErrorLogsStrategy(command),
+                StoreProcedure.GetPaginatedErrorLogs => new GetPaginatedErrorLogsStrategy(command),
                 _ => throw new ArgumentException($"Invalid procedure: {EnumHandler.GetValue(procedure)}")
             } ;
         }

@@ -21,7 +21,7 @@ namespace LoggingManagerAdapters.Services
 
             LoginDto loginDto = new LoginDto { User = user.Data, Token = new TokenDto()};
 
-            GenericResponse<LoginDto> response = new GenericResponse<LoginDto> { Data = loginDto, ErrorCode= user.ErrorCode, ErrorMessage=user.ErrorMessage };
+            GenericResponse<LoginDto> response = new GenericResponse<LoginDto>(user.ErrorCode,user.ErrorMessage,loginDto);
 
             return response;
         }
