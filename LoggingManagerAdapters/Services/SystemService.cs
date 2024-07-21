@@ -24,6 +24,16 @@ namespace LoggingManagerAdapters.Services
             return systemRepository.getAll();
         }
 
+        public GenericResponse<List<ErrorLog>>? GetErrorLogs(int systemId)
+        {
+            return systemRepository.GetErrorLogs(systemId);
+        }
+
+        public GenericPaginatedResponse<List<ErrorLog>>? GetErrorLogs(GetErrorLogDto errorLogDto)
+        {
+            return systemRepository.GetErrorLogs(errorLogDto);
+        }
+
         public GenericResponse<string>? Update(UpdateSystemDto updateSystemDto)
         {
             return systemRepository.Update(updateSystemDto);

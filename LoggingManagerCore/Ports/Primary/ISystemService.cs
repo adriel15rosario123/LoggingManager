@@ -10,5 +10,9 @@ namespace LoggingManagerCore.Ports.Primary
         GenericResponse<string>? Create(CreateSystemDto createSystemDto);
 
         GenericResponse<string>? Update(UpdateSystemDto updateSystemDto);
+
+        GenericResponse<List<ErrorLog>>? GetErrorLogs(int systemId);
+
+        GenericPaginatedResponse<List<ErrorLog>>? GetErrorLogs(GetErrorLogDto errorLogDto);
     }
 }

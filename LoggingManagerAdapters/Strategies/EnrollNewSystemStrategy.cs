@@ -16,7 +16,7 @@ namespace LoggingManagerAdapters.Strategies
         {
             this.command = command;
         }
-        public GenericResponse<TOutput>? executeProcedure<TOutput>()
+        public TOutput? executeProcedure<TOutput>() where TOutput : class 
         {
             command.ExecuteNonQuery();
 
@@ -24,7 +24,7 @@ namespace LoggingManagerAdapters.Strategies
             string? errorMessage = ((OracleString)command.Parameters["o_error_message"].Value).IsNull ? null : command.Parameters["o_error_message"].Value.ToString();
             string? responseData = ((OracleString)command.Parameters["o_response_data"].Value).IsNull ? null : command.Parameters["o_response_data"].Value.ToString();
 
-            return new GenericResponse<string>(errorCode, errorMessage, responseData) as GenericResponse<TOutput>;
+            return new GenericResponse<string>(errorCode, errorMessage, responseData) as TOutput;
         }
 
         public void setParameters<TInput>(TInput? inputs = default)

@@ -15,7 +15,7 @@ namespace LoggingManagerAdapters.Strategies
         {
             this.command = command;
         }
-        public GenericResponse<TOutput>? executeProcedure<TOutput>()
+        public TOutput? executeProcedure<TOutput>() where TOutput : class
         {
             command.ExecuteNonQuery();
 
@@ -47,11 +47,11 @@ namespace LoggingManagerAdapters.Strategies
                     enrolledSystems.Add(enrollSystem);
                 }
 
-                return new GenericResponse<List<EnrollSystem>>(errorCode, errorMessage, enrolledSystems) as GenericResponse<TOutput>;
+                return new GenericResponse<List<EnrollSystem>>(errorCode, errorMessage, enrolledSystems) as TOutput;
             }
             else
             {
-                return new GenericResponse<User>(errorCode, errorMessage) as GenericResponse<TOutput>;
+                return new GenericResponse<List<EnrollSystem>>(errorCode, errorMessage) as TOutput;
             }
         }
 

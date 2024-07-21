@@ -7,26 +7,25 @@ using System.Data;
 
 namespace LoggingManagerAdapters.Strategies
 {
-    public class LoginUserStrategy : IProcedureStrategy
+    public class GetErrorLogsStrategy : IProcedureStrategy
     {
-
         private OracleCommand command;
 
-        public LoginUserStrategy(OracleCommand command)
+        public GetErrorLogsStrategy(OracleCommand command)
         {
             this.command = command;
         }
 
         public TOutput? executeProcedure<TOutput>() where TOutput : class
         {
-
             command.ExecuteNonQuery();
 
             int? errorCode = ((OracleDecimal)command.Parameters["o_error_code"].Value).IsNull ? null : ((OracleDecimal)command.Parameters["o_error_code"].Value).ToInt32();
             string? errorMessage = ((OracleString)command.Parameters["o_error_message"].Value).IsNull ? null : command.Parameters["o_error_message"].Value.ToString();
 
-            User user = new User();
+            List<ErrorLog> errorLogs = new List<ErrorLog>();
 
+            //retrive the output parameters
             if (errorCode is null)
             {
                 // Successful execution, retrieve data from the cursor
@@ -34,40 +33,40 @@ namespace LoggingManagerAdapters.Strategies
 
                 while (reader.Read())
                 {
-                    user.UserId = reader.GetInt32(reader.GetOrdinal("UserId"));
-                    user.Username = reader.GetString(reader.GetOrdinal("Username"));
-                    user.UserType.UserTypeId = reader.GetInt32(reader.GetOrdinal("UserTypeId"));
-                    user.UserType.Type = reader.GetString(reader.GetOrdinal("UserType"));
+                    ErrorLog errorLog = new ErrorLog
+                    {
+                        LogId = reader.GetInt32(reader.GetOrdinal("LogId")),
+                        LoggingDate = reader.GetDateTime(reader.GetOrdinal("LoggingDate")),
+                        MethodName = reader.IsDBNull(reader.GetOrdinal("MethodName")) ? null: reader.GetString(reader.GetOrdinal("MethodName")),
+                        MethodInput = reader.IsDBNull(reader.GetOrdinal("MethodInput")) ? null : reader.GetString(reader.GetOrdinal("MethodInput")),
+                        MethodOutput = reader.IsDBNull(reader.GetOrdinal("MethodOutput"))? null : reader.GetString(reader.GetOrdinal("MethodOutput")),
+                        LogType = reader.GetString(reader.GetOrdinal("LogType")),
+                        Message = reader.IsDBNull(reader.GetOrdinal("Message")) ? null : reader.GetString(reader.GetOrdinal("Message"))
+                    };
+
+                    errorLogs.Add(errorLog);
                 }
 
-                return new GenericResponse<User>(errorCode, errorMessage, user) as TOutput;
+                return new GenericResponse<List<ErrorLog>>(errorCode, errorMessage, errorLogs) as TOutput;
             }
             else
             {
-                return new GenericResponse<User>(errorCode, errorMessage) as TOutput;
+                return new GenericResponse<List<ErrorLog>>(errorCode, errorMessage) as TOutput;
             }
         }
 
         public void setParameters<TInput>(TInput? inputs = default)
         {
-          
             OracleParameter[] parameters =
             [
 
-                //Input params
-                new OracleParameter()
+               //Input params
+               new OracleParameter()
                 {
-                    ParameterName = "p_username",
-                    OracleDbType = OracleDbType.NVarchar2,
-                    Value = (inputs as Credential)!.Username,
-                    IsNullable = true
-                },
-                new OracleParameter()
-                {
-                    ParameterName = "p_password",
-                    OracleDbType = OracleDbType.NVarchar2,
-                    Value = (inputs as Credential)!.Password,
-                    IsNullable = true
+                    ParameterName = "p_system_id",
+                    OracleDbType = OracleDbType.Int64,
+                    Value = inputs is int ? (int)(object)inputs : 0,
+                    IsNullable = false,
                 },
 
                 //Output params
@@ -76,6 +75,7 @@ namespace LoggingManagerAdapters.Strategies
                     ParameterName = "o_response_data",
                     OracleDbType = OracleDbType.RefCursor,
                     Direction = ParameterDirection.Output,
+                    Size = 200,
                     IsNullable = true
                 },
                 new OracleParameter()
@@ -87,14 +87,14 @@ namespace LoggingManagerAdapters.Strategies
                 },
                 new OracleParameter(){
                     ParameterName = "o_error_message",
-                    OracleDbType = OracleDbType.Varchar2,
+                    OracleDbType = OracleDbType.NVarchar2,
                     Direction = ParameterDirection.Output,
                     Size = 200,
                     IsNullable = true
                 },
             ];
 
-            command.Parameters.AddRange( parameters );
+            command.Parameters.AddRange(parameters);
         }
     }
 }

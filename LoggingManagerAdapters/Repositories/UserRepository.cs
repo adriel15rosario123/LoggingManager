@@ -15,12 +15,12 @@ namespace LoggingManagerAdapters.Repositories
 
         public GenericResponse<User>? getByUsername(string username)
         {
-            return context.ExecuteStoreProcedure<string,User>(StoreProcedure.GetUserByUsername, username);
+            return context.ExecuteStoreProcedure<string, GenericResponse<User>>(StoreProcedure.GetUserByUsername, username);
         }
 
         public GenericResponse<User>? login(Credential credential)
         {
-            return context.ExecuteStoreProcedure<Credential,User>(StoreProcedure.LoginUser, credential);    
+            return context.ExecuteStoreProcedure<Credential, GenericResponse<User>>(StoreProcedure.LoginUser, credential);    
         }
 
     }

@@ -20,9 +20,5 @@
             ErrorMessage = errorMessage;
         }
 
-        public GenericResponse()
-        {
-
-        }
     }
 }

@@ -18,6 +18,12 @@ namespace LoggingManagerCore.Enums
         EnrollNewSystem,
 
         [EnumStringValue("UPDATE_SYSTEM")]
-        UpdateSystem
+        UpdateSystem,
+
+        [EnumStringValue("GET_ERROR_LOGS")]
+        GetErrorLogs,
+
+        [EnumStringValue("GET_PAGINATED_ERROR_LOGS")]
+        GetPaginatedErrorLogs
     }
 }
