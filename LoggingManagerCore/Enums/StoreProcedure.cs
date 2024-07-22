@@ -24,6 +24,9 @@ namespace LoggingManagerCore.Enums
         GetErrorLogs,
 
         [EnumStringValue("GET_PAGINATED_ERROR_LOGS")]
-        GetPaginatedErrorLogs
+        GetPaginatedErrorLogs,
+
+        [EnumStringValue("GET_PAGINATED_TRACKING_LOGS")]
+        GetPaginatedTrackingLogs
     }
 }

@@ -49,7 +49,14 @@ namespace LoggingManagerAPI.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult GetPaginatedErrors(int id, [FromQuery]int pageSize,[FromQuery]int pageNumber)
         {
-            return Ok(_systemService.GetErrorLogs(new GetErrorLogDto(id,pageSize,pageNumber)));
+            return Ok(_systemService.GetErrorLogs(new GetLogDto(id,pageSize,pageNumber)));
+        }
+
+        [HttpGet("{id}/trackings")]
+        [Authorize(Roles = "admin")]
+        public IActionResult GetPaginatedTrackings(int id, [FromQuery]int pageSize, [FromQuery]int pageNumber)
+        {
+            return Ok(_systemService.GetTrackingLogs(new GetLogDto(id, pageSize, pageNumber)));
         }
     }
 }

@@ -13,6 +13,8 @@ namespace LoggingManagerCore.Ports.Secundary
 
         GenericResponse<List<ErrorLog>>? GetErrorLogs(int systemId);
 
-        GenericPaginatedResponse<List<ErrorLog>>? GetErrorLogs(GetErrorLogDto getErrorLogDto);
+        GenericPaginatedResponse<List<ErrorLog>>? GetErrorLogs(GetLogDto getErrorLogDto);
+
+        GenericPaginatedResponse<List<TrackingLog>>? GetTrackingLogs(GetLogDto getTrackingLogDto);
     }
 }
