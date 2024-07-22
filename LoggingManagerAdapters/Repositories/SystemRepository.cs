@@ -29,9 +29,14 @@ namespace LoggingManagerAdapters.Repositories
             return context.ExecuteStoreProcedure<int, GenericResponse<List<ErrorLog>>>(StoreProcedure.GetErrorLogs,systemId);
         }
 
-        public GenericPaginatedResponse<List<ErrorLog>>? GetErrorLogs(GetErrorLogDto getErrorLogDto)
+        public GenericPaginatedResponse<List<ErrorLog>>? GetErrorLogs(GetLogDto getErrorLogDto)
         {
-            return context.ExecuteStoreProcedure<GetErrorLogDto, GenericPaginatedResponse<List<ErrorLog>>>(StoreProcedure.GetPaginatedErrorLogs,getErrorLogDto);
+            return context.ExecuteStoreProcedure<GetLogDto, GenericPaginatedResponse<List<ErrorLog>>>(StoreProcedure.GetPaginatedErrorLogs,getErrorLogDto);
+        }
+
+        public GenericPaginatedResponse<List<TrackingLog>>? GetTrackingLogs(GetLogDto getTrackingLogDto)
+        {
+            return context.ExecuteStoreProcedure<GetLogDto, GenericPaginatedResponse<List<TrackingLog>>>(StoreProcedure.GetPaginatedTrackingLogs, getTrackingLogDto);
         }
 
         public GenericResponse<string>? Update(UpdateSystemDto updateSystemDto)

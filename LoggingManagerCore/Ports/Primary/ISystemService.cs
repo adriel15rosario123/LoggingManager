@@ -13,6 +13,9 @@ namespace LoggingManagerCore.Ports.Primary
 
         GenericResponse<List<ErrorLog>>? GetErrorLogs(int systemId);
 
-        GenericPaginatedResponse<List<ErrorLog>>? GetErrorLogs(GetErrorLogDto errorLogDto);
+        GenericPaginatedResponse<List<ErrorLog>>? GetErrorLogs(GetLogDto errorLogDto);
+
+        GenericPaginatedResponse<List<TrackingLog>>? GetTrackingLogs(GetLogDto trackingLogDto);
+
     }
 }

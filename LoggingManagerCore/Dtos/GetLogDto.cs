@@ -2,18 +2,18 @@
 
 namespace LoggingManagerCore.Dtos
 {
-    public class GetErrorLogDto
+    public class GetLogDto
     {
         public int SystemId { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
 
-        public GetErrorLogDto()
+        public GetLogDto()
         {
             
         }
 
-        public GetErrorLogDto(int systemId, int pageSize, int pageNumber)
+        public GetLogDto(int systemId, int pageSize, int pageNumber)
         {
             SystemId = systemId;
             PageSize = pageSize;

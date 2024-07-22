@@ -3,15 +3,20 @@ using LoggingManagerCore.Entities;
 using LoggingManagerCore.Ports.Secundary;
 using Oracle.ManagedDataAccess.Client;
 using Oracle.ManagedDataAccess.Types;
+using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LoggingManagerAdapters.Strategies
 {
-    public class GetPaginatedErrorLogsStrategy : IProcedureStrategy
+    public class GetPaginatedTrackingLogsStrategy : IProcedureStrategy
     {
         private OracleCommand command;
 
-        public GetPaginatedErrorLogsStrategy(OracleCommand command)
+        public GetPaginatedTrackingLogsStrategy(OracleCommand command)
         {
             this.command = command;
         }
@@ -27,7 +32,7 @@ namespace LoggingManagerAdapters.Strategies
             int? errorCode = ((OracleDecimal)command.Parameters["o_error_code"].Value).IsNull ? null : ((OracleDecimal)command.Parameters["o_error_code"].Value).ToInt32();
             string? errorMessage = ((OracleString)command.Parameters["o_error_message"].Value).IsNull ? null : command.Parameters["o_error_message"].Value.ToString();
 
-            List<ErrorLog> errorLogs = new List<ErrorLog>();
+            List<TrackingLog> trackingLogs = new List<TrackingLog>();
 
             //retrive the output parameters
             if (errorCode is null)
@@ -37,7 +42,7 @@ namespace LoggingManagerAdapters.Strategies
 
                 while (reader.Read())
                 {
-                    ErrorLog errorLog = new ErrorLog
+                    TrackingLog trackinLog = new TrackingLog
                     {
                         LogId = reader.GetInt32(reader.GetOrdinal("LogId")),
                         LoggingDate = reader.GetDateTime(reader.GetOrdinal("LoggingDate")),
@@ -48,14 +53,14 @@ namespace LoggingManagerAdapters.Strategies
                         Message = reader.IsDBNull(reader.GetOrdinal("Message")) ? null : reader.GetString(reader.GetOrdinal("Message"))
                     };
 
-                    errorLogs.Add(errorLog);
+                    trackingLogs.Add(trackinLog);
                 }
 
-                return new GenericPaginatedResponse<List<ErrorLog>>(errorCode, errorMessage,errorLogs,pageNumber,pageSize,totalPages,totalRecords) as TOutput;
+                return new GenericPaginatedResponse<List<TrackingLog>>(errorCode, errorMessage, trackingLogs, pageNumber, pageSize, totalPages, totalRecords) as TOutput;
             }
             else
             {
-                return new GenericPaginatedResponse<List<ErrorLog>>(errorCode, errorMessage,pageNumber, pageSize, totalPages, totalRecords) as TOutput;
+                return new GenericPaginatedResponse<List<TrackingLog>>(errorCode, errorMessage, pageNumber, pageSize, totalPages, totalRecords) as TOutput;
             }
         }
 
