@@ -33,6 +33,7 @@ namespace LoggingManagerAdapters.Helpers
                 StoreProcedure.GetErrorLogs => new GetErrorLogsStrategy(command),
                 StoreProcedure.GetPaginatedErrorLogs => new GetPaginatedErrorLogsStrategy(command),
                 StoreProcedure.GetPaginatedTrackingLogs => new GetPaginatedTrackingLogsStrategy(command),
+                StoreProcedure.DeleteSystem => new DeleteSystemStrategy(command),
                 _ => throw new ArgumentException($"Invalid procedure: {EnumHandler.GetValue(procedure)}")
             } ;
         }

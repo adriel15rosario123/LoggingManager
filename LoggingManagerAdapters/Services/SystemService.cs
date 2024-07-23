@@ -19,6 +19,11 @@ namespace LoggingManagerAdapters.Services
             return systemRepository.Create(createSystemDto);
         }
 
+        public GenericResponse<string>? Delete(int systemId)
+        {
+            return systemRepository.Delete(systemId);
+        }
+
         public GenericResponse<List<EnrollSystem>>? getAll()
         {
             return systemRepository.getAll();
