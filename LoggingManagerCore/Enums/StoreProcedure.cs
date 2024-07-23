@@ -27,6 +27,9 @@ namespace LoggingManagerCore.Enums
         GetPaginatedErrorLogs,
 
         [EnumStringValue("GET_PAGINATED_TRACKING_LOGS")]
-        GetPaginatedTrackingLogs
+        GetPaginatedTrackingLogs,
+
+        [EnumStringValue("DELETE_ENROLLED_SYSTEM")]
+        DeleteSystem
     }
 }

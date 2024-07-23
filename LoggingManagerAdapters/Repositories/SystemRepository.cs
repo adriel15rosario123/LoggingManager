@@ -2,6 +2,7 @@
 using LoggingManagerCore.Entities;
 using LoggingManagerCore.Enums;
 using LoggingManagerCore.Ports.Secundary;
+using System.Reflection;
 
 namespace LoggingManagerAdapters.Repositories
 {
@@ -17,6 +18,11 @@ namespace LoggingManagerAdapters.Repositories
         public GenericResponse<string>? Create(CreateSystemDto createSystemDto)
         {
             return context.ExecuteStoreProcedure<CreateSystemDto, GenericResponse<string>>(StoreProcedure.EnrollNewSystem,createSystemDto);
+        }
+
+        public GenericResponse<string>? Delete(int systemId)
+        {
+            return context.ExecuteStoreProcedure<int, GenericResponse<string>>(StoreProcedure.DeleteSystem,systemId);
         }
 
         public GenericResponse<List<EnrollSystem>>? getAll()

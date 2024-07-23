@@ -17,5 +17,7 @@ namespace LoggingManagerCore.Ports.Primary
 
         GenericPaginatedResponse<List<TrackingLog>>? GetTrackingLogs(GetLogDto trackingLogDto);
 
+        GenericResponse<string>? Delete(int systemId);
+
     }
 }

@@ -58,5 +58,12 @@ namespace LoggingManagerAPI.Controllers
         {
             return Ok(_systemService.GetTrackingLogs(new GetLogDto(id, pageSize, pageNumber)));
         }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public IActionResult Delete(int id)
+        {
+            return Ok(_systemService.Delete(id));
+        }
     }
 }
